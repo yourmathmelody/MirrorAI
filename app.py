@@ -2,7 +2,7 @@ Ezgi, tüm isteklerini (biyometrik detaylar, göz altı morlukları, kansızlık
 
 Bu kod, paylaştığın Gemini 3 Flash (2026) SDK yapısını kullanır ve yazıları kristal netliğinde gösterir.
 
-🛠️ MirrorAI | Nihai ve Birleştirilmiş Tam Kod (app.py)
+ MirrorAI | Nihai ve Birleştirilmiş Tam Kod (app.py)
 GitHub'daki app.py dosyasını tamamen sil ve bu hatasız sürümü yapıştır:
 
 Python
