@@ -1,22 +1,19 @@
 import streamlit as st
 import google.generativeai as genai
-import time
-import random
 
-# --- 1. API ANAHTARI VE AKILLI MODEL SEÇİCİ ---
+# --- KESİN ÇÖZÜM BAĞLANTISI ---
 API_KEY = "AIzaSyD6XOsY27_LflguRU2SEcjYQk27e3s8FKc"
 genai.configure(api_key=API_KEY)
 
-# Sistemin en güncel modeli bulması için 3 aşamalı deneme
+# Sistem neyi kabul ediyorsa onu otomatik seçen mantık
 try:
-    model = genai.GenerativeModel('models/gemini-1.5-flash')
-    model.generate_content("test") # Test çalıştırması
+    # 1. Tercih: Yeni nesil Flash model
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    model.generate_content("test") # Çalışıp çalışmadığını anında kontrol et
 except:
-    try:
-        model = genai.GenerativeModel('gemini-1.5-flash')
-    except:
-        model = genai.GenerativeModel('gemini-pro')
-
+    # 2. Tercih: Eğer kütüphane eskiyse bu ismi kesin tanır
+    model = genai.GenerativeModel('gemini-pro')
+    
 # --- 2. AYRINTILI ARA YÜZ VE TASARIM (MAVİ-YEŞİL NEON) ---
 st.set_page_config(page_title="MirrorAI | Sağlık Koçu", layout="wide")
 
