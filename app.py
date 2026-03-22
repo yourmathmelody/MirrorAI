@@ -49,7 +49,6 @@ with col1:
     isim = st.text_input("Adınız Soyadınız", placeholder="Örn: Ezgi Büyükkaya")
     yas = st.slider("Yaşınız", 15, 85, 22)
     
-    # Senin istediğin o alternatif başlıklar
     odak_noktasi = st.selectbox(
         "Analiz Odak Noktası", 
         ["Karın Bölgesi & Yağ Yakımı", "Cilt Sağlığı & Parlaklık", "Postür Düzeltme & Esneklik", "Kas Kütlesi & Şekillenme"]
@@ -57,18 +56,31 @@ with col1:
     
     kamera = st.camera_input("Biyometrik Tarama (Yüz ve Gövde)")
 
-    if st.button("🚀 ANALİZİ VE ADIM ADIM KOÇLUĞU BAŞLAT"):
+    if st.button("🚀 ANALİZİ VE KOÇLUĞU BAŞLAT"):
         if isim and kamera:
             with st.spinner("Gemini 3 Flash verileri işliyor..."):
                 try:
                     # Rastgele simüle edilen veriler
                     f_yag = random.randint(18, 27)
-                    f_su = random.randint(58, 66)
                     
-                    # YAPAY ZEKAYA VERİLEN AYRINTILI TALİMAT (PROMPT)
-                    istek = f"""
-                    Sen profesyonel bir fitness koçu ve beslenme uzmanısın. 
-                    Kullanıcı: {isim}, Yaş: {yas}, Odak Noktası: {odak_noktasi}.
-                    Tahmini Yağ Oranı: %{f_yag}.
+                    # YAPAY ZEKAYA VERİLEN AYRINTILI TALİMAT
+                    # Syntax hatasını önlemek için f-string'i tek satırda birleştirdik
+                    istek = f"Sen profesyonel bir fitness koçu ve beslenme uzmanısın. Kullanıcı: {isim}, Yaş: {yas}, Odak Noktası: {odak_noktasi}, Tahmini Yağ Oranı: %{f_yag}. Lütfen şu başlıklarda ÇÖZÜM odaklı bir rapor hazırla: 1. Mevcut Durum Analizi, 2. Bölgesel Spor ve Karın Egzersizleri (Adım Adım), 3. Yağ Yakıcı Beslenme ve Vitamin Önerileri, 4. Cilt Sağlığı İçin Detoks Önerisi, 5. Bu Haftalık 3 Somut Aksiyon Adımı."
                     
-                    Lütfen şu başlıklarda ADIM ADIM ve ÇÖZÜM odaklı bir rapor hazırla:
+                    # Gemini 3 Flash Preview Model Çağrısı
+                    response = client.models.generate_content(
+                        model="gemini-3-flash-preview", 
+                        contents=istek
+                    )
+                    
+                    st.session_state['mirror_raporu'] = response.text
+                    st.session_state['yag_sonuc'] = f_yag
+                    st.success("✅ Analiz Başarıyla Tamamlandı!")
+                    
+                except Exception as e:
+                    st.error(f"❌ Motor Hatası: {str(e)}")
+        else:
+            st.warning("⚠️ Lütfen isim girin ve kamerayı onaylayın.")
+
+with col2:
+    st.subheader("🤖 MirrorAI Kişisel Gelişim
