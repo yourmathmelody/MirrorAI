@@ -5,9 +5,13 @@ import random
 # --- 1. SAYFA VE SİSTEM AYARLARI ---
 st.set_page_config(page_title="MirrorAI | Profesyonel Sağlık Koçu", layout="wide")
 
-# Yeni Nesil SDK Yapılandırması (2026)
-API_KEY = "AIzaSyA1jrF344zDTDLdcF3TkqMNarYwtXQIXIE"
-client = genai.Client(api_key=API_KEY)
+# SIZINTI KORUMASI: Anahtar kodun içinde değil, Streamlit Secrets'ta saklanır.
+try:
+    API_KEY = st.secrets["GEMINI_API_KEY"]
+    client = genai.Client(api_key=API_KEY)
+except Exception:
+    st.error("⚠️ API Anahtarı bulunamadı! Lütfen Streamlit Secrets kısmına GEMINI_API_KEY ekleyin.")
+    st.stop()
 
 # --- 2. PREMIUM NEON ARAYÜZ TASARIMI ---
 st.markdown("""
@@ -60,14 +64,11 @@ with col1:
         if isim and kamera:
             with st.spinner("Gemini 3 Flash verileri işliyor..."):
                 try:
-                    # Rastgele simüle edilen veriler
                     f_yag = random.randint(18, 27)
                     
-                    # YAPAY ZEKAYA VERİLEN AYRINTILI TALİMAT
-                    # Syntax hatasını önlemek için f-string'i tek satırda birleştirdik
+                    # PROMPT: Senin istediğin adım adım çözüm önerileri
                     istek = f"Sen profesyonel bir fitness koçu ve beslenme uzmanısın. Kullanıcı: {isim}, Yaş: {yas}, Odak Noktası: {odak_noktasi}, Tahmini Yağ Oranı: %{f_yag}. Lütfen şu başlıklarda ÇÖZÜM odaklı bir rapor hazırla: 1. Mevcut Durum Analizi, 2. Bölgesel Spor ve Karın Egzersizleri (Adım Adım), 3. Yağ Yakıcı Beslenme ve Vitamin Önerileri, 4. Cilt Sağlığı İçin Detoks Önerisi, 5. Bu Haftalık 3 Somut Aksiyon Adımı."
                     
-                    # Gemini 3 Flash Preview Model Çağrısı
                     response = client.models.generate_content(
                         model="gemini-3-flash-preview", 
                         contents=istek
@@ -85,10 +86,7 @@ with col1:
 with col2:
     st.subheader("🤖 MirrorAI Kişisel Gelişim Raporu")
     if 'mirror_raporu' in st.session_state:
-        # Özet Metrikler
         st.markdown(f"<div class='metric-box'>🔥 Tahmini Yağ: %{st.session_state['yag_sonuc']} | 💧 Su Dengesi: %64</div>", unsafe_allow_html=True)
-            
-        # Ana Rapor Alanı
         st.markdown(f'<div class="report-card">{st.session_state["mirror_raporu"]}</div>', unsafe_allow_html=True)
     else:
         st.info("Kameranızı açıp analizi başlattığınızda dijital koçunuzun raporu burada belirecek.")
