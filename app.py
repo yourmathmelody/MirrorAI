@@ -3,15 +3,19 @@ import google.generativeai as genai
 import time
 import random
 
-# --- 1. API ANAHTARI VE GÜVENLİ MODEL BAĞLANTISI ---
+# --- 1. API ANAHTARI VE AKILLI MODEL SEÇİCİ ---
 API_KEY = "AIzaSyD6XOsY27_LflguRU2SEcjYQk27e3s8FKc"
 genai.configure(api_key=API_KEY)
 
-# Hata vermeyen, en güncel model ismi (Küçük harf ve doğru dizim)
+# Sistemin en güncel modeli bulması için 3 aşamalı deneme
 try:
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('models/gemini-1.5-flash')
+    model.generate_content("test") # Test çalıştırması
 except:
-    model = genai.GenerativeModel('gemini-pro')
+    try:
+        model = genai.GenerativeModel('gemini-1.5-flash')
+    except:
+        model = genai.GenerativeModel('gemini-pro')
 
 # --- 2. AYRINTILI ARA YÜZ VE TASARIM (MAVİ-YEŞİL NEON) ---
 st.set_page_config(page_title="MirrorAI | Sağlık Koçu", layout="wide")
@@ -65,7 +69,7 @@ with col1:
 
     if st.button("AYNADAN TARAMAYI VE ANALİZİ BAŞLAT"):
         if isim and kamera:
-            # TARAMA SİMÜLASYONU (Görsel Şölen)
+            # GÖRSEL TARAMA SİMÜLASYONU
             progress_bar = st.progress(0)
             status_text = st.empty()
             
@@ -79,23 +83,23 @@ with col1:
             st.toast(f"✅ Biyometrik Veriler Aynadan Başarıyla Çekildi!", icon='🌐')
             
             with st.spinner("Dijital koçun derin raporunu hazırlıyor..."):
-                # "Mış Gibi" Yapan Sanal Veriler
-                fake_goz_alti = random.choice(["Hafif Morluk", "Yorgun", "Normal"])
-                fake_nem = random.randint(30, 60)
-                fake_yag = random.randint(yas // 2, yas + 10)
+                # Sanal Veri Üretimi
+                f_goz = random.choice(["Hafif Morluk", "Yorgun", "Normal"])
+                f_nem = random.randint(30, 60)
+                f_yag = random.randint(yas // 2, yas + 10)
                 
                 prompt = f"""
                 Sen bir Dijital Sağlık Koçusun. Kullanıcı: {isim}, Yaş: {yas}.
-                Aynadan taranan sanal veriler: Göz Altı: {fake_goz_alti}, Nem: %{fake_nem}, Yağ Oranı: %{fake_yag}.
+                Aynadan taranan sanal veriler: Göz Altı: {f_goz}, Nem: %{f_nem}, Yağ Oranı: %{f_yag}.
                 Bu verilere göre vitamin eksikliği, bölgesel yağlanma ve spor programı önerileri ver.
-                Mavi-yeşil neon teknolojik bir dille, "Aynadan taranan verilere göre..." diyerek yanıt ver.
+                Teknolojik bir dille, "Aynadan taranan verilere göre..." diyerek yanıt ver.
                 """
                 
                 try:
                     response = model.generate_content(prompt)
                     st.session_state['koç_raporu'] = response.text
                 except Exception as e:
-                    st.error(f"Bağlantı hatası: {e}. Lütfen model ismini kontrol edin.")
+                    st.error(f"Bağlantı hatası: {e}. Lütfen requirements.txt dosyasını kontrol edin.")
         else:
             st.warning("İsim ve Kamera verisi eksik.")
 
