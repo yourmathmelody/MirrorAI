@@ -76,24 +76,22 @@ with col1:
     yas = st.slider("Yaşınız", 1, 100, 22)
     kamera = st.camera_input("Biyometrik Yüz Taraması")
 
-    if st.button("ANALİZİ VE KOÇLUĞU BAŞLAT"):
+if st.button("ANALİZİ VE KOÇLUĞU BAŞLAT"):
         if model_engine is None:
-            st.error("⚠️ Yapay Zeka Motoru Çalıştırılamadı. Lütfen requirements.txt dosyasını kontrol edin.")
+            st.error("⚠️ Yapay Zeka Motoru Çalıştırılamadı.")
         elif isim and kamera:
-            # İlerleme Çubuğu Animasyonu
-            progress = st.progress(0)
-            for i in range(101):
-                time.sleep(0.01)
-                progress.progress(i)
-            
-            st.toast("✅ Veriler Başarıyla Analiz Edildi!", icon='🚀')
-            
-            with st.spinner("Dijital koçun kişiselleştirilmiş raporunu hazırlıyor..."):
-                # Simülatif Sağlık Verileri
-                f_yag = random.randint(18, 28)
-                f_enerji = random.randint(70, 95)
-                
-                prompt = (f"Sen profesyonel bir sağlık ve yaşam koçusun. "
-                         f"Kullanıcı: {isim}, Yaş: {yas}. "
-                         f"Tahmini Yağ Oranı: %{f_yag}, Enerji Seviyesi: %{f_enerji}. "
-                         f"Lütfen bu kişiye özel, samimi, 3-4 maddelik vitamin ve spor önerisi ver.")
+            with st.spinner("Dijital koçun raporunu hazırlıyor..."):
+                try:
+                    # Rapor hazırlama süreci
+                    f_yag = random.randint(18, 28)
+                    f_enerji = random.randint(70, 95)
+                    
+                    text_istegi = f"Kullanıcı: {isim}. Yaş: {yas}. Yağ: %{f_yag}. Bana 3 kısa sağlık önerisi ver."
+                    
+                    response = model_engine.generate_content(text_istegi)
+                    st.session_state['mirror_raporu'] = response.text
+                except Exception as e:
+                    st.error(f"Bağlantı Hatası: {e}")
+        else:
+            st.warning("Lütfen isim girin ve kamerayı onaylayın.")
+   
