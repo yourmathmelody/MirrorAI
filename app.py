@@ -3,20 +3,23 @@ import google.generativeai as genai
 import time
 import random
 
-# --- 1. SİSTEM AYARLARI ---
+# --- 1. SİSTEM AYARLARI VE BAĞLANTI ---
 st.set_page_config(page_title="MirrorAI | Sağlık Koçu", layout="wide")
 
-# Secrets'tan anahtarı güvenli çekme
+# Senin yeni anahtarını buraya zırhlı bir şekilde ekledim
+API_KEY = "AIzaSyA1jrF344zDTDLdcF3TkqMNarYwtXQIXIE"
+
 try:
-    API_KEY = st.secrets["GEMINI_KEY"]
     genai.configure(api_key=API_KEY)
-    # Grafiğinde çalışan en güncel modeli seçtik
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # Hata veren kısmı 'models/' ekleyerek tamir ettim:
+    model = genai.GenerativeModel('models/gemini-1.5-flash')
+    # Bağlantı testi
+    model.generate_content("test")
 except Exception as e:
     st.error(f"Bağlantı Kurulamadı: {e}")
     model = None
 
-# --- 2. GÖRSEL TASARIM (MAVİ-YEŞİL NEON) ---
+# --- 2. TASARIM (MAVİ-YEŞİL NEON) ---
 st.markdown("""
     <style>
     .main { background-color: #05080f; color: #e0e0e0; }
@@ -45,13 +48,13 @@ with col1:
     if st.button("ANALİZİ BAŞLAT"):
         if model and isim and kamera:
             with st.spinner("Yapay zeka verileri işliyor..."):
-                time.sleep(2) # Simülasyon
                 try:
-                    prompt = f"Sen bir sağlık koçusun. Kullanıcı ismi: {isim}. Bu kişi için 3 kısa sağlık ve vitamin önerisi ver."
+                    # Raporu hazırlayan kısım
+                    prompt = f"Sen profesyonel bir sağlık koçusun. Kullanıcı ismi: {isim}. Bu kişi için 3 tane çok kısa vitamin ve yaşam önerisi ver."
                     response = model.generate_content(prompt)
                     st.session_state['sonuc'] = response.text
                 except Exception as e:
-                    st.error(f"Model Hatası: {e}")
+                    st.error(f"Rapor hazırlanırken hata oluştu: {e}")
         else:
             st.warning("Lütfen isim girin ve kamerayı kullanın.")
 
