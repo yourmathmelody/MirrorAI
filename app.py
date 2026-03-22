@@ -145,4 +145,3 @@ with col2:
         st.markdown(f'<div class="report-card">{st.session_state["mirror_raporu"]}</div>', unsafe_allow_html=True)
     else:
         st.info("Sonuçlar burada kristal netliğinde belirecek.")
-📋 Ezgi, Lütf
