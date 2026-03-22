@@ -2,9 +2,8 @@ import streamlit as st
 import google.generativeai as genai
 
 # --- 1. YAPAY ZEKA AYARI ---
-# Google AI Studio'dan aldığın anahtarı BURAYA yapıştır
-# Eğer henüz almadıysan şimdilik boş bırakabilirsin ama çalışmaz.
-genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+# Anahtarını buraya doğrudan tırnak içine yapıştırıyoruz
+genai.configure(api_key="AIzaSyBzDTPzJmUovHk-DBxenQfDJ4i5nHlRUgM")
 model = genai.GenerativeModel('gemini-pro')
 
 # --- 2. GÖRSEL TASARIM ---
