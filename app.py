@@ -6,14 +6,14 @@ import random
 # --- 1. SİSTEM VE API YAPILANDIRMASI ---
 st.set_page_config(page_title="MirrorAI | Dijital Sağlık Koçu", layout="wide")
 
-# API Anahtarı
+# Senin API Anahtarın
 API_KEY = "AIzaSyA1jrF344zDTDLdcF3TkqMNarYwtXQIXIE"
 
 @st.cache_resource
 def load_ai_engine():
     try:
         genai.configure(api_key=API_KEY)
-        # 404 hatalarını bitiren akıllı seçim
+        # Model isimlerini sırayla deniyoruz
         for model_name in ['gemini-1.5-flash', 'models/gemini-1.5-flash', 'gemini-pro']:
             try:
                 m = genai.GenerativeModel(model_name)
@@ -47,7 +47,7 @@ st.markdown("""
     </style>
     
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <div id="particles-js" style="position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;"></div>
+    <div id="particles-js" style="position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;"></div >
     <script>
     particlesJS("particles-js", {
         "particles": {
@@ -60,20 +60,4 @@ st.markdown("""
     </script>
     """, unsafe_allow_html=True)
 
-# --- 3. ANA PANEL ---
-st.title("🪞 MirrorAI: Geleceğin Sağlık Aynası")
-
-col1, col2 = st.columns([1, 1])
-
-with col1:
-    st.subheader("🌐 Veri Girişi")
-    isim = st.text_input("Adınız Soyadınız", placeholder="Örn: Ezgi Büyükkaya")
-    yas = st.slider("Yaşınız", 1, 100, 22)
-    kamera = st.camera_input("Biyometrik Yüz Taraması")
-
-    # BUTON VE ANALİZ AKIŞI
-    if st.button("ANALİZİ VE KOÇLUĞU BAŞLAT"):
-        if model_engine is None:
-            st.error("⚠️ Yapay Zeka Motoru Bağlanamadı! Lütfen API anahtarını kontrol edin.")
-        elif isim and kamera:
-            with
+#
