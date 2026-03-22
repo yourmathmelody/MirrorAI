@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 # --- 1. YAPAY ZEKA AYARI ---
 genai.configure(api_key="AIzaSyBzDTPzJmUovHk-DBxenQfDJ4i5nHlRUgM")
-model = genai.GenerativeModel('models/gemini-1.5_flash')
+model = genai.GenerativeModel('models/gemini-1.5-flash')
 
 # --- 2. GÖRSEL TASARIM ---
 st.set_page_config(page_title="MirrorAI | Güvenli Sağlık Analizi", layout="wide")
