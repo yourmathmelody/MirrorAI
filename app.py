@@ -1,26 +1,29 @@
 import streamlit as st
 import google.generativeai as genai
 
-# --- 1. YAPAY ZEKA AYARI ---
+# 1. API ANAHTARI AYARI
 genai.configure(api_key="AIzaSyBzDTPzJmUovHk-DBxenQfDJ4i5nHlRUgM")
-model = genai.GenerativeModel('models/gemini-1.5-flash')
 
-# --- 2. GÖRSEL TASARIM ---
-st.set_page_config(page_title="MirrorAI | Güvenli Sağlık Analizi", layout="wide")
+# 2. DOĞRU MODELİ OTOMATİK BULMA
+try:
+    # Google'dan senin için çalışan modellerin listesini istiyoruz
+    modeller = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+    # Eğer liste boş değilse ilk sıradakini (en güncelini) al, yoksa varsayılan gemini-pro'yu kullan
+    secilen_model = modeller[0] if modeller else "models/gemini-pro"
+    model = genai.GenerativeModel(secilen_model)
+except Exception as e:
+    st.error(f"Modellere erişilemedi: {e}")
+    secilen_model = "models/gemini-pro"
+    model = genai.GenerativeModel(secilen_model)
 
-st.markdown("""
-<style>
-    .main { background-color: #000000; color: #ffffff; }
-    .stButton>button { background: linear-gradient(45deg, #ff4b4b, #b22222); color: white; border-radius: 15px; width: 100%; height: 50px; font-weight: bold; border: none; }
-</style>
-""", unsafe_allow_html=True)
+# 3. GÖRSEL TASARIM
+st.set_page_config(page_title="MirrorAI | Analiz", layout="wide")
+st.title("🪞 MirrorAI: Akıllı Tarama")
 
-st.title("🪞 MirrorAI: Akıllı Biyometrik Tarama")
-
-# Test için basit bir buton
 if st.button("ANALİZİ BAŞLAT"):
     try:
-        response = model.generate_content("Merhaba, analiz yapmaya hazır mısın?")
+        response = model.generate_content("Merhaba, sistem testi başarılı mı?")
+        st.success(f"✅ Başarılı! Kullanılan Model: {secilen_model}")
         st.write(response.text)
     except Exception as e:
-        st.error(f"Hata oluştu: {e}")
+        st.error(f"Hala bir sorun var: {e}")
