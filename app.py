@@ -88,4 +88,12 @@ with col1:
             
             st.toast("✅ Veriler Başarıyla Analiz Edildi!", icon='🚀')
             
-            with st.spinner("Dijital koçun
+            with st.spinner("Dijital koçun kişiselleştirilmiş raporunu hazırlıyor..."):
+                # Simülatif Sağlık Verileri
+                f_yag = random.randint(18, 28)
+                f_enerji = random.randint(70, 95)
+                
+                prompt = (f"Sen profesyonel bir sağlık ve yaşam koçusun. "
+                         f"Kullanıcı: {isim}, Yaş: {yas}. "
+                         f"Tahmini Yağ Oranı: %{f_yag}, Enerji Seviyesi: %{f_enerji}. "
+                         f"Lütfen bu kişiye özel, samimi, 3-4 maddelik vitamin ve spor önerisi ver.")
