@@ -5,7 +5,7 @@ import random
 
 # --- 1. GÜNCEL API ANAHTARI VE MODEL BAĞLANTISI ---
 # Senin verdiğin tam anahtarı buraya hatasız yerleştirdim.
-API_KEY = "AIzaSyD6XOsY27_LflguRU2SEcjYQk27e3s8FKc"
+API_KEY = "AIzaSyDaLtQymBdqwTvoguXrRyd-F174kFhsn7s"
 genai.configure(api_key=API_KEY)
 
 # Hata vermeyen, her sürümde çalışan model seçici
