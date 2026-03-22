@@ -2,7 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 
 # 1. API ANAHTARI AYARI
-genai.configure(api_key="AIzaSyBzDTPzJmUovHk-DBxenQfDJ4i5nHlRUgM")
+genai.configure(api_key="AIzaSyD6XOsY27_LflguRU2SEcjYQk27e3s8FKc")
 
 # 2. DOĞRU MODELİ OTOMATİK BULMA
 try:
