@@ -2,7 +2,27 @@ import streamlit as st
 import google.generativeai as genai
 import time
 import random
+# --- 1. ÖNCE KÜTÜPHANEYİ VE ANAHTARI KUR ---
+import google.generativeai as genai
+import streamlit as st
 
+# Anahtarını direkt buraya, en tepeye yazıyoruz
+API_KEY = "AIzaSyA1jrF344zDTDLdcF3TkqMNarYwtXQIXIE"
+
+try:
+    # ADIM A: Önce kapıyı aç (Konfigüre et)
+    genai.configure(api_key=API_KEY)
+    
+    # ADIM B: Sonra içeri gir (Modeli tanımla)
+    # Başına 'models/' ekleyerek en garanti yolu seçiyoruz
+    model = genai.GenerativeModel('models/gemini-1.5-flash')
+    
+    # ADIM C: Bağlantıyı test et
+    model.generate_content("test")
+    st.session_state['motor_calisiyor'] = True
+except Exception as e:
+    st.session_state['motor_calisiyor'] = False
+    st.session_state['hata_mesaji'] = str(e)
 # --- 1. SİSTEM VE API YAPILANDIRMASI ---
 st.set_page_config(page_title="MirrorAI | Dijital Sağlık Koçu", layout="wide")
 
