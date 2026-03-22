@@ -4,7 +4,7 @@ import google.generativeai as genai
 # --- 1. YAPAY ZEKA AYARI ---
 # Google AI Studio'dan aldığın anahtarı BURAYA yapıştır
 # Eğer henüz almadıysan şimdilik boş bırakabilirsin ama çalışmaz.
-genai.configure(api_key="st.secrets["GOOGLE_API_KEY"])
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 model = genai.GenerativeModel('gemini-pro')
 
 # --- 2. GÖRSEL TASARIM ---
