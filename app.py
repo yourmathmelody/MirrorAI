@@ -3,29 +3,26 @@ import google.generativeai as genai
 import time
 import random
 
-# --- 1. GÜNCEL API ANAHTARI VE BAĞLANTI ---
-# Senin yeni aldığın tam anahtarı buraya yerleştirdim.
+# --- 1. API ANAHTARI VE GÜVENLİ MODEL BAĞLANTISI ---
+# Senin en taze, hata mesajı içermeyen API anahtarın:
 API_KEY = "AIzaSyDaLtQymBdqwTvoguXrRyd-F174kFhsn7s"
+genai.configure(api_key=API_KEY)
 
 @st.cache_resource
-def load_mirror_model():
-    try:
-        genai.configure(api_key=API_KEY)
-        # Sistemde çalışan en uygun modeli bulur
-        for m_name in ['gemini-1.5-flash', 'models/gemini-1.5-flash', 'gemini-pro']:
-            try:
-                m = genai.GenerativeModel(m_name)
-                m.generate_content("test") 
-                return m
-            except:
-                continue
-        return None
-    except:
-        return None
+def load_mirror_ai():
+    # Sistemde hangi model varsa onu bulana kadar dener (404 hatasını önler)
+    for m_name in ['gemini-1.5-flash', 'gemini-pro']:
+        try:
+            m = genai.GenerativeModel(m_name)
+            m.generate_content("test") 
+            return m
+        except:
+            continue
+    return None
 
-model = load_mirror_model()
+model = load_mirror_ai()
 
-# --- 2. TASARIM (MAVİ-YEŞİL NEON & BALONCUKLAR) ---
+# --- 2. AYRINTILI ARA YÜZ VE TASARIM (MAVİ-YEŞİL NEON) ---
 st.set_page_config(page_title="MirrorAI | Sağlık Koçu", layout="wide")
 
 st.markdown("""
@@ -38,9 +35,11 @@ st.markdown("""
         border: none; box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
         font-size: 18px; transition: 0.3s;
     }
+    .stButton>button:hover { transform: scale(1.05); box-shadow: 0 0 30px #00f2fe; }
     .report-card {
         background: rgba(16, 21, 31, 0.9); padding: 25px; border-radius: 20px;
         border: 2px solid #00f2fe; box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+        line-height: 1.6;
     }
     </style>
     
@@ -50,7 +49,7 @@ st.markdown("""
     particlesJS("particles-js", {
         "particles": {
             "number": { "value": 90 }, "color": { "value": "#00f2fe" },
-            "shape": { "type": "circle" }, "opacity": { "0.4" },
+            "shape": { "type": "circle" }, "opacity": { "value": 0.4 },
             "size": { "value": 3 }, "line_linked": { "enable": true, "color": "#4facfe" },
             "move": { "enable": true, "speed": 2 }
         }
@@ -70,7 +69,7 @@ with col1:
 
     if st.button("ANALİZİ VE KOÇLUĞU BAŞLAT"):
         if model is None:
-            st.error("⚠️ Yapay zeka motoru başlatılamadı. Lütfen API anahtarını kontrol edin.")
+            st.error("⚠️ Yapay zeka motoru başlatılamadı. API anahtarı veya kütüphane sorunu var.")
         elif isim and kamera:
             progress_bar = st.progress(0)
             for p in range(101):
@@ -84,19 +83,19 @@ with col1:
                 f_nem = random.randint(30, 60)
                 f_yag = random.randint(yas // 2, yas + 10)
                 
-                prompt = f"Kullanıcı: {isim}, Yaş: {yas}. Biyometrik Veriler: Göz {f_goz}, Nem %{f_nem}, Yağ %{f_yag}. Bir sağlık koçu gibi vitamin ve spor önerileri ver."
+                prompt = f"Kullanıcı: {isim}, Yaş: {yas}. Biyometrik Veriler: Göz {f_goz}, Nem %{f_nem}, Yağ %{f_yag}. Sağlık koçu önerileri ver."
                 
                 try:
                     response = model.generate_content(prompt)
-                    st.session_state['rapor'] = response.text
+                    st.session_state['koç_raporu'] = response.text
                 except Exception as e:
                     st.error(f"Bağlantı Sorunu: {e}")
         else:
-            st.warning("İsim ve Kamera gereklidir.")
+            st.warning("Eksik bilgi: İsim ve Kamera gerekli.")
 
 with col2:
     st.subheader("🤖 MirrorAI Koçluk Raporu")
-    if 'rapor' in st.session_state:
-        st.markdown(f'<div class="report-card">{st.session_state["rapor"]}</div>', unsafe_allow_html=True)
+    if 'koç_raporu' in st.session_state:
+        st.markdown(f'<div class="report-card">{st.session_state["koç_raporu"]}</div>', unsafe_allow_html=True)
     else:
-        st.write("Analiz sonuçların burada belirecek.")
+        st.write("Analiz raporun burada belirecek.")
