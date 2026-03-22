@@ -83,4 +83,15 @@ with col1:
             st.warning("⚠️ Lütfen isim girin ve kamerayı onaylayın.")
 
 with col2:
-    st.subheader("🤖 MirrorAI Kişisel Gelişim
+    st.subheader("🤖 MirrorAI Kişisel Gelişim Raporu")
+    if 'mirror_raporu' in st.session_state:
+        # Özet Metrikler
+        st.markdown(f"<div class='metric-box'>🔥 Tahmini Yağ: %{st.session_state['yag_sonuc']} | 💧 Su Dengesi: %64</div>", unsafe_allow_html=True)
+            
+        # Ana Rapor Alanı
+        st.markdown(f'<div class="report-card">{st.session_state["mirror_raporu"]}</div>', unsafe_allow_html=True)
+    else:
+        st.info("Kameranızı açıp analizi başlattığınızda dijital koçunuzun raporu burada belirecek.")
+
+st.markdown("---")
+st.caption("MirrorAI bir dijital rehberdir. Uygulamadan önce bir uzmana danışmanız önerilir.")
