@@ -9,11 +9,15 @@ genai.configure(api_key=API_KEY)
 
 # HATA ÇÖZÜMÜ: Modeli tam yoluyla (models/) tanımlıyoruz
 try:
+    # 1. En güncel yolu dene
     model = genai.GenerativeModel('models/gemini-1.5-flash')
 except:
-    # Eğer yukarıdaki olmazsa en garanti eski sürümü deniyoruz
-    model = genai.GenerativeModel('gemini-pro')
-
+    try:
+        # 2. Alternatif kısa ismi dene
+        model = genai.GenerativeModel('gemini-1.5-flash')
+    except:
+        # 3. En eski ve her yerde çalışan ismi dene
+        model = genai.GenerativeModel('gemini-pro')
 # --- 2. GÖRSEL TASARIM (MAVİ-YEŞİL NEON & BALONCUKLAR) ---
 st.set_page_config(page_title="MirrorAI | Sağlık Koçu", layout="wide")
 
