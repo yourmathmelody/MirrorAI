@@ -1,12 +1,12 @@
+# Koddaki API kısmını buna çevir:
 import streamlit as st
 import google.generativeai as genai
-import time
-import random
 
-# --- 1. API ANAHTARI VE GÜVENLİ MODEL BAĞLANTISI ---
-# Senin en taze, hata mesajı içermeyen API anahtarın:
-API_KEY = "AIzaSyDaLtQymBdqwTvoguXrRyd-F174kFhsn7s"
+# Sistemdeki anahtarı bulana kadar dener
+API_KEY = st.secrets.get("GEMINI_KEY") or st.secrets.get("Gemini API Key") or "AIzaSyDaLtQymBdqwTvoguXrRyd-F174kFhsn7s"
+
 genai.configure(api_key=API_KEY)
+model = genai.GenerativeModel('gemini-pro')
 
 @st.cache_resource
 def load_mirror_ai():
