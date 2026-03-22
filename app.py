@@ -12,7 +12,7 @@ API_KEY = "AIzaSyA1jrF344zDTDLdcF3TkqMNarYwtXQIXIE"
 try:
     genai.configure(api_key=API_KEY)
     # Hata veren kısmı 'models/' ekleyerek tamir ettim:
-    model = genai.GenerativeModel('models/gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-1.5-flash')
     # Bağlantı testi
     model.generate_content("test")
 except Exception as e:
