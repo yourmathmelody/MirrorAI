@@ -11,7 +11,7 @@ API_KEY = "AIzaSyDaLtQymBdqwTvoguXrRyd-F174kFhsn7s"
 def test_connection():
     try:
         genai.configure(api_key=API_KEY)
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('models/gemini-pro')
         # Bu satır gerçek testi yapar
         response = model.generate_content("Merhaba")
         return model, "✅ Bağlantı Başarılı!"
